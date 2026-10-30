@@ -1,0 +1,290 @@
+openapi: 3.0.3
+info:
+  title: Product & Currency Management RESTful API
+  description: API profesional en Laravel para la administración de productos, catálogo de divisas y gestión de precios multidivisa con validaciones de integridad referencial.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api
+    description: Servidor de desarrollo local
+
+paths:
+  /currencies:
+    get:
+      summary: Listar todas las divisas registradas
+      tags:
+        - Currencies
+      responses:
+        '200':
+          description: Lista de divisas obtenida con éxito
+          content:
+            application/json:
+              example:
+                success: true
+                message: Listado de divisas obtenido correctamente.
+                data:
+                  - id: 1
+                    name: USD
+                    symbol: "$"
+                    exchange_rate: 1.000000
+                    created_at: "2026-01-01T10:00:00.000000Z"
+                    updated_at: "2026-01-01T10:00:00.000000Z"
+                  - id: 2
+                    name: EUR
+                    symbol: "€"
+                    exchange_rate: 0.920000
+                    created_at: "2026-01-01T10:00:00.000000Z"
+                    updated_at: "2026-01-01T10:00:00.000000Z"
+    post:
+      summary: Registrar una nueva divisa
+      tags:
+        - Currencies
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - symbol
+                - exchange_rate
+              properties:
+                name:
+                  type: string
+                  example: GBP
+                symbol:
+                  type: string
+                  example: "£"
+                exchange_rate:
+                  type: number
+                  format: float
+                  example: 0.790000
+      responses:
+        '201':
+          description: Divisa creada con éxito
+        '422':
+          description: Error de validación o divisa duplicada
+
+  /currencies/{id}:
+    get:
+      summary: Consultar detalle de una divisa
+      tags:
+        - Currencies
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalle obtenido con éxito
+        '404':
+          description: Divisa no encontrada
+    put:
+      summary: Actualizar datos o tasa de cambio de una divisa
+      tags:
+        - Currencies
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: GBP
+                symbol:
+                  type: string
+                  example: "£"
+                exchange_rate:
+                  type: number
+                  example: 0.810000
+      responses:
+        '200':
+          description: Divisa actualizada
+        '404':
+          description: Divisa no encontrada
+        '422':
+          description: Error de validación
+
+  /products:
+    get:
+      summary: Listar productos con paginación
+      tags:
+        - Products
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            default: 15
+      responses:
+        '200':
+          description: Listado paginado de productos
+    post:
+      summary: Registrar un nuevo producto
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - price
+                - currency_id
+              properties:
+                name:
+                  type: string
+                  example: Laptop Gamer Pro
+                description:
+                  type: string
+                  example: Laptop de 16 pulgadas con GPU dedicada
+                price:
+                  type: number
+                  example: 1500.00
+                currency_id:
+                  type: integer
+                  example: 1
+                tax_cost:
+                  type: number
+                  example: 150.00
+                manufacturing_cost:
+                  type: number
+                  example: 950.00
+      responses:
+        '201':
+          description: Producto creado con éxito
+        '422':
+          description: Error de validación
+
+  /products/{id}:
+    get:
+      summary: Consultar producto por ID
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Producto encontrado
+        '404':
+          description: Producto no encontrado
+    put:
+      summary: Actualizar un producto
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+                tax_cost:
+                  type: number
+                manufacturing_cost:
+                  type: number
+      responses:
+        '200':
+          description: Producto actualizado
+        '404':
+          description: Producto no encontrado
+        '422':
+          description: Error de validación
+    delete:
+      summary: Eliminar un producto y sus precios en cascada
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Producto eliminado
+        '404':
+          description: Producto no encontrado
+
+  /products/{id}/prices:
+    get:
+      summary: Listar precios fijados para un producto en distintas divisas
+      tags:
+        - Product Prices
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Precios del producto
+        '404':
+          description: Producto no encontrado
+    post:
+      summary: Registrar precio para una divisa específica
+      tags:
+        - Product Prices
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - currency_id
+                - price
+              properties:
+                currency_id:
+                  type: integer
+                  example: 2
+                price:
+                  type: number
+                  example: 1380.00
+      responses:
+        '201':
+          description: Precio registrado exitosamente
+        '404':
+          description: Producto no encontrado
+        '409':
+          description: Conflicto - precio ya registrado para esa divisa
+        '422':
+          description: Error de validación

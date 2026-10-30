@@ -1,0 +1,207 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-10-30T01:35:00.000Z",
+  "__export_source": "insomnia.desktop.app:v9.0.0",
+  "resources": [
+    {
+      "_id": "wrk_product_currency",
+      "parentId": null,
+      "modified": 1730252100000,
+      "created": 1730252100000,
+      "name": "Product Currency API",
+      "description": "API RESTful para gestión de productos y precios en diferentes divisas.",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_base",
+      "parentId": "wrk_product_currency",
+      "modified": 1730252100000,
+      "created": 1730252100000,
+      "name": "Local Environment",
+      "data": {
+        "base_url": "http://localhost:8000/api",
+        "product_id": 1,
+        "currency_id": 1
+      },
+      "dataPropertyOrder": {
+        "&": ["base_url", "product_id", "currency_id"]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1730252100000,
+      "_type": "environment"
+    },
+    {
+      "_id": "fld_currencies",
+      "parentId": "wrk_product_currency",
+      "modified": 1730252100000,
+      "created": 1730252100000,
+      "name": "Divisas (Currencies)",
+      "description": "Endpoints para consultar y administrar el catálogo de divisas.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -100,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_list_currencies",
+      "parentId": "fld_currencies",
+      "name": "Listar Divisas",
+      "url": "{{ _.base_url }}/currencies",
+      "method": "GET",
+      "headers": [{ "name": "Accept", "value": "application/json" }],
+      "body": {},
+      "parameters": [],
+      "_type": "request"
+    },
+    {
+      "_id": "req_create_currency",
+      "parentId": "fld_currencies",
+      "name": "Crear Divisa",
+      "url": "{{ _.base_url }}/currencies",
+      "method": "POST",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Accept", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"CAD\",\n  \"symbol\": \"$\",\n  \"exchange_rate\": 1.36\n}"
+      },
+      "parameters": [],
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_currency",
+      "parentId": "fld_currencies",
+      "name": "Consultar Divisa por ID",
+      "url": "{{ _.base_url }}/currencies/{{ _.currency_id }}",
+      "method": "GET",
+      "headers": [{ "name": "Accept", "value": "application/json" }],
+      "body": {},
+      "parameters": [],
+      "_type": "request"
+    },
+    {
+      "_id": "req_update_currency",
+      "parentId": "fld_currencies",
+      "name": "Actualizar Divisa",
+      "url": "{{ _.base_url }}/currencies/{{ _.currency_id }}",
+      "method": "PUT",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Accept", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"exchange_rate\": 1.385\n}"
+      },
+      "parameters": [],
+      "_type": "request"
+    },
+    {
+      "_id": "fld_products",
+      "parentId": "wrk_product_currency",
+      "name": "Productos (Products)",
+      "description": "Endpoints para el CRUD de productos.",
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_list_products",
+      "parentId": "fld_products",
+      "name": "Listar Productos (Paginado)",
+      "url": "{{ _.base_url }}/products?page=1&per_page=15",
+      "method": "GET",
+      "headers": [{ "name": "Accept", "value": "application/json" }],
+      "body": {},
+      "_type": "request"
+    },
+    {
+      "_id": "req_create_product",
+      "parentId": "fld_products",
+      "name": "Crear Producto",
+      "url": "{{ _.base_url }}/products",
+      "method": "POST",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Accept", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Monitor Gamer 32 IPS\",\n  \"description\": \"Monitor 165Hz con resolución 1440p\",\n  \"price\": 450.00,\n  \"currency_id\": 1,\n  \"tax_cost\": 45.00,\n  \"manufacturing_cost\": 250.00\n}"
+      },
+      "_type": "request"
+    },
+    {
+      "_id": "req_get_product",
+      "parentId": "fld_products",
+      "name": "Consultar Producto por ID",
+      "url": "{{ _.base_url }}/products/{{ _.product_id }}",
+      "method": "GET",
+      "headers": [{ "name": "Accept", "value": "application/json" }],
+      "body": {},
+      "_type": "request"
+    },
+    {
+      "_id": "req_update_product",
+      "parentId": "fld_products",
+      "name": "Actualizar Producto",
+      "url": "{{ _.base_url }}/products/{{ _.product_id }}",
+      "method": "PUT",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Accept", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"price\": 479.99,\n  \"description\": \"Monitor Gamer 165Hz con garantía extendida\"\n}"
+      },
+      "_type": "request"
+    },
+    {
+      "_id": "req_delete_product",
+      "parentId": "fld_products",
+      "name": "Eliminar Producto",
+      "url": "{{ _.base_url }}/products/{{ _.product_id }}",
+      "method": "DELETE",
+      "headers": [{ "name": "Accept", "value": "application/json" }],
+      "body": {},
+      "_type": "request"
+    },
+    {
+      "_id": "fld_prices",
+      "parentId": "wrk_product_currency",
+      "name": "Precios por Divisa (Prices)",
+      "description": "Endpoints para gestionar precios multidivisa de un producto.",
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_list_prices",
+      "parentId": "fld_prices",
+      "name": "Listar Precios del Producto",
+      "url": "{{ _.base_url }}/products/{{ _.product_id }}/prices",
+      "method": "GET",
+      "headers": [{ "name": "Accept", "value": "application/json" }],
+      "body": {},
+      "_type": "request"
+    },
+    {
+      "_id": "req_create_price",
+      "parentId": "fld_prices",
+      "name": "Registrar Precio en Divisa",
+      "url": "{{ _.base_url }}/products/{{ _.product_id }}/prices",
+      "method": "POST",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Accept", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"currency_id\": 2,\n  \"price\": 414.00\n}"
+      },
+      "_type": "request"
+    }
+  ]
+}
