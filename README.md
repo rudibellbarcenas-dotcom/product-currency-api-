@@ -17,7 +17,7 @@ API RESTful profesional construida con **Laravel**, diseñada bajo principios de
 
 ### Paso 1: Clonar o posicionarse en el proyecto
 ```bash
-cd "C:\Users\Rudibell Barcenas\.gemini\antigravity\scratch\product-currency-api"
+https://github.com/rudibellbarcenas-dotcom/product-currency-api-.git
 ```
 
 ### Paso 2: Instalar dependencias de Composer
